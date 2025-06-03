@@ -28,8 +28,8 @@
 
   const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
   const defaultPlace = {
-    name: '303 S Technology Ct',
-    address: '303 S Technology Ct',
+    name: '1130 James L Hart Pkwy',
+    address: '1130 James L Hart Pkwy',
   };
   let location: google.maps.LatLng | undefined;
   const zoom = 19;
