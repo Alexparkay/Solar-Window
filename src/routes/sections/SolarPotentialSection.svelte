@@ -497,7 +497,7 @@
                 {
                   icon: 'payments',
                   name: 'Monthly energy cost',
-                  value: showMoney(4000),
+                  value: showMoney(monthlyKwhEnergyConsumption * energyCostPerKwhInput),
                 },
               ]}
             />
@@ -513,7 +513,7 @@
   <div class="panel-specs">
     <h3>Panel Specifications (Q-Solar Elite)</h3>
     <ul>
-      <li>Wattage: {panelCapacityWatts}W</li>
+      <li>Wattage: {panelCapacityWattsInput}W</li>
       <li>Efficiency: {panelEfficiency}%</li>
       <li>Warranty: {installationLifeSpan} years</li>
       <li>Dimensions: {panelDimensions.length} x {panelDimensions.width} x {panelDimensions.height} mm</li>
@@ -524,7 +524,7 @@
     <h3>Inverter Specifications (Q-Power X2)</h3>
     <ul>
       <li>Capacity: {inverterCapacity} kW</li>
-      <li>Efficiency: {dcToAcDerate * 100}%</li>
+      <li>Efficiency: {dcToAcDerateInput * 100}%</li>
       <li>Features: Smart monitoring, Battery ready, Rapid shutdown, Dual MPPT</li>
     </ul>
   </div>

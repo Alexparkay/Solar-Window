@@ -33,14 +33,12 @@
       <li>
         <strong>Initialize</strong> the embedding:
         <pre class="bg-gray-100 p-3 rounded mt-2 overflow-x-auto">
-          <code>
-const solarWindow = SolarWindow.embed({
+          <code>const solarWindow = SolarWindow.embed(&#123;
   containerId: 'solar-window-container',
   height: '600px',
   width: '100%',
   defaultLocation: '303 S Technology Ct'
-});
-          </code>
+&#125;);</code>
         </pre>
       </li>
     </ol>
@@ -54,21 +52,19 @@ const solarWindow = SolarWindow.embed({
     </p>
     
     <pre class="bg-gray-100 p-3 rounded overflow-x-auto mb-6">
-      <code>
-// Listen for state updates
-solarWindow.onMessage('STATE_UPDATE', (payload) => {
+      <code>// Listen for state updates
+solarWindow.onMessage('STATE_UPDATE', (payload) => &#123;
   console.log('Solar Window state:', payload);
-});
+&#125;);
 
 // Listen for user interactions
-solarWindow.onMessage('INTERACTION', (payload) => {
+solarWindow.onMessage('INTERACTION', (payload) => &#123;
   console.log('User interaction:', payload);
-});
+&#125;);
 
 // Send commands to Solar Window
 solarWindow.sendMessage('COMMAND', 'INITIALIZE');
-solarWindow.sendMessage('STATE_REQUEST', '');
-      </code>
+solarWindow.sendMessage('STATE_REQUEST', '');</code>
     </pre>
   </div>
   
