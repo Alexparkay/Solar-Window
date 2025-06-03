@@ -51,34 +51,34 @@
 
   let costChart: HTMLElement;
   let showAdvancedSettings = false;
-  
+
   // Regional energy data from EIA API
   let regionalEnergyData: RegionalEnergyData | null = null;
   let isLoadingEnergyData = true;
   let energyDataError = false;
   let energyDataErrorMessage = '';
-  
+
   // Load regional energy data when location changes
   $: if (location) {
     loadRegionalEnergyData(location);
   }
-  
+
   async function loadRegionalEnergyData(location: google.maps.LatLng) {
     isLoadingEnergyData = true;
     energyDataError = false;
     energyDataErrorMessage = '';
-    
+
     try {
       console.log('Loading energy data for location:', location.toString());
       regionalEnergyData = await getRegionalEnergyData(location);
       console.log('Received regional energy data:', regionalEnergyData);
-      
+
       // If we got valid energy data, update the energy cost input with the regional average
       if (regionalEnergyData?.averageResidentialRate) {
         // EIA API returns in cents per kWh, so divide by 100 to get dollars per kWh
         const regionRate = regionalEnergyData.averageResidentialRate / 100;
         console.log('Regional rate:', regionRate, 'Current rate:', energyCostPerKwhInput);
-        
+
         // Only auto-update if user hasn't manually set a value that's significantly different
         if (Math.abs(energyCostPerKwhInput - regionRate) > 0.05) {
           console.log('Updating energy cost to regional rate:', regionRate);
@@ -92,9 +92,9 @@
       console.error('Error loading regional energy data:', error);
       energyDataError = true;
       energyDataErrorMessage = error instanceof Error ? error.message : 'Unknown error';
-      
+
       // Don't hide the error state immediately
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 3000));
     } finally {
       isLoadingEnergyData = false;
     }
@@ -250,24 +250,13 @@
     );
   }
 
-  // Default values based on Q-Solar Elite specifications
-  let panelWattage = 450; // Q-Solar Elite wattage
+  // Equipment specifications for display
   let panelEfficiency = 22.8; // Q-Solar Elite efficiency
-  let inverterEfficiency = 98.2; // Q-Power X2 efficiency
-  let systemLosses = 100 - 21.6; // Based on overall system efficiency
-  let tiltAngle = 30; // Standard optimal tilt
-  let azimuthAngle = 180; // South-facing
-  let dcAcRatio = 1.2; // Standard DC/AC ratio
-  let groundCoverageRatio = 0.4; // Standard GCR
-  let annualDegradation = 0.5; // Standard degradation rate
-  let panelLifespan = 30; // Q-Solar Elite warranty period
-  
-  // Advanced settings
   let inverterCapacity = 11.4; // Q-Power X2 capacity in kW
   let panelDimensions = {
     length: 1855,
     width: 1038,
-    height: 35
+    height: 35,
   }; // Q-Solar Elite dimensions
 </script>
 
@@ -298,7 +287,7 @@
             </span>
           </p>
         </div>
-        
+
         <!-- Energy Cost Card -->
         <EnergyCostCard
           energyData={regionalEnergyData}
@@ -516,10 +505,12 @@
       <li>Wattage: {panelCapacityWattsInput}W</li>
       <li>Efficiency: {panelEfficiency}%</li>
       <li>Warranty: {installationLifeSpan} years</li>
-      <li>Dimensions: {panelDimensions.length} x {panelDimensions.width} x {panelDimensions.height} mm</li>
+      <li>
+        Dimensions: {panelDimensions.length} x {panelDimensions.width} x {panelDimensions.height} mm
+      </li>
     </ul>
   </div>
-  
+
   <div class="inverter-specs">
     <h3>Inverter Specifications (Q-Power X2)</h3>
     <ul>
@@ -543,7 +534,8 @@
     border-radius: 0.5rem;
   }
 
-  .panel-specs, .inverter-specs {
+  .panel-specs,
+  .inverter-specs {
     padding: 1rem;
   }
 
@@ -561,12 +553,12 @@
     margin-bottom: 0.5rem;
     color: var(--md-sys-color-on-surface-dark);
   }
-  
+
   /* Add orange color to the Solar Potential analysis title and icon */
   :global(.solar-potential-section md-icon:first-child) {
     color: var(--md-sys-color-primary-light) !important;
   }
-  
+
   :global(.solar-potential-section .body-large) {
     color: var(--md-sys-color-primary-light) !important;
   }

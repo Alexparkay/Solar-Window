@@ -18,7 +18,6 @@
   /* global google */
 
   import { onMount } from 'svelte';
-  import type { MdFilledTextField } from '@material/web/textfield/filled-text-field';
 
   export let location: google.maps.LatLng | undefined;
 
@@ -27,7 +26,6 @@
   export let initialValue = '';
   export let zoom = 19;
 
-  let textFieldElement: MdFilledTextField;
   let searchInput: HTMLInputElement;
 
   onMount(async () => {
@@ -62,15 +60,23 @@
 <div class="search-container">
   <div class="search-bar">
     <div class="search-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24" fill="currentColor">
-        <path d="M0 0h24v24H0z" fill="none"/>
-        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24"
+        viewBox="0 0 24 24"
+        width="24"
+        fill="currentColor"
+      >
+        <path d="M0 0h24v24H0z" fill="none" />
+        <path
+          d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+        />
       </svg>
     </div>
-    <input 
+    <input
       bind:this={searchInput}
-      type="text" 
-      placeholder="Search an address..." 
+      type="text"
+      placeholder="Search an address..."
       value={initialValue}
       class="search-input"
     />
@@ -105,7 +111,8 @@
     transition: all 0.3s ease;
   }
 
-  .search-bar:hover, .search-bar:focus-within {
+  .search-bar:hover,
+  .search-bar:focus-within {
     transform: scale(1.02);
     box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -125,7 +132,13 @@
     font-size: 16px;
     outline: none;
     width: 100%;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family:
+      'Inter',
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      sans-serif;
     font-weight: 400;
     letter-spacing: 0.3px;
   }
@@ -136,7 +149,13 @@
 
   /* Animation for better UX */
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 </style>

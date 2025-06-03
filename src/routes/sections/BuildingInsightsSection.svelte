@@ -85,25 +85,24 @@
     requestSent = true;
     try {
       buildingInsights = await findClosestBuilding(location, googleMapsApiKey);
-      
+
       // Notify parent dashboard of new building insights
       updateEngineState({
         buildingInsights,
-        solarPotential: buildingInsights.solarPotential
+        solarPotential: buildingInsights.solarPotential,
       });
-      
+
       // Send interaction event
       sendInteraction('solar_analysis_complete', {
         address: buildingInsights.postalCode,
         yearlyEnergy: buildingInsights.solarPotential.maxSunshineHoursPerYear,
-        panelsCount: buildingInsights.solarPotential.solarPanels.length
+        panelsCount: buildingInsights.solarPotential.solarPanels.length,
       });
-      
     } catch (e) {
       requestError = e as RequestError;
       // Notify parent dashboard of error
       sendInteraction('solar_analysis_error', {
-        error: requestError.error
+        error: requestError.error,
       });
       return;
     } finally {
@@ -150,8 +149,8 @@
       buildingInsights,
       solarPotential: {
         ...buildingInsights.solarPotential,
-        selectedConfig: panelConfig
-      }
+        selectedConfig: panelConfig,
+      },
     });
   }
 

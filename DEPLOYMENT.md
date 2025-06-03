@@ -34,21 +34,25 @@ Before deploying, you need to configure the following environment variables in y
 #### Option 1: Deploy via Vercel CLI
 
 1. Install Vercel CLI:
+
    ```bash
    npm i -g vercel
    ```
 
 2. Login to Vercel:
+
    ```bash
    vercel login
    ```
 
 3. Deploy the project:
+
    ```bash
    vercel
    ```
 
 4. Set environment variables:
+
    ```bash
    vercel env add VITE_GOOGLE_MAPS_API_KEY
    vercel env add VITE_EIA_API_KEY
@@ -74,6 +78,7 @@ Before deploying, you need to configure the following environment variables in y
 ### Build Configuration
 
 The project is already configured with:
+
 - ✅ `@sveltejs/adapter-vercel` for Vercel deployment
 - ✅ `vercel.json` configuration file
 - ✅ Proper build scripts in `package.json`
@@ -86,7 +91,7 @@ The project is already configured with:
 2. Create a new project or select existing one
 3. Enable the following APIs:
    - Maps JavaScript API
-   - Solar API  
+   - Solar API
    - Geocoding API
 4. Create credentials (API Key)
 5. Restrict the API key to your domain for security
@@ -94,6 +99,7 @@ The project is already configured with:
 #### Google Solar API Setup
 
 Make sure your Google Cloud project has the Solar API enabled:
+
 1. Go to APIs & Services → Library
 2. Search for "Solar API"
 3. Click Enable
@@ -137,6 +143,7 @@ After successful deployment:
 ## Support
 
 For deployment issues:
+
 1. Check Vercel function logs
 2. Review the application console for client-side errors
-3. Verify API quotas and billing in Google Cloud Console 
+3. Verify API quotas and billing in Google Cloud Console

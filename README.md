@@ -116,7 +116,6 @@ You can also discuss this sample on our [Discord server].
 
 [Solar API]: https://developers.google.com/maps/documentation/solar
 [API key]: https://developers.google.com/maps/documentation/solar/get-api-key
-
 [code of conduct]: ?tab=coc-ov-file#readme
 [contributing guide]: CONTRIBUTING
 [Deprecation Policy]: https://cloud.google.com/maps-platform/terms

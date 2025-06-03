@@ -156,7 +156,7 @@ export function GET() {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
-    'Cache-Control': dev ? 'no-cache' : 'public, max-age=3600'
+    'Cache-Control': dev ? 'no-cache' : 'public, max-age=3600',
   };
 
   return new Response(embedScript, { headers });
@@ -168,7 +168,7 @@ export function OPTIONS() {
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type'
-    }
+      'Access-Control-Allow-Headers': 'Content-Type',
+    },
   });
-} 
+}

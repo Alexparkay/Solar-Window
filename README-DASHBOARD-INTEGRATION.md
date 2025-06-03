@@ -5,6 +5,7 @@ This guide explains how to connect your Solar Window app with your dashboard app
 ## Step 1: Start the Solar Window Application
 
 1. Make sure your Solar Window application is running:
+
    ```bash
    npm run dev
    ```
@@ -17,10 +18,10 @@ In your dashboard application's `EnergyUsageEstimation.tsx` file, update the `SO
 
 ```typescript
 // Replace this:
-const SOLAR_WINDOW_URL = "https://your-solar-window-url";
+const SOLAR_WINDOW_URL = 'https://your-solar-window-url';
 
 // With this (using the actual URL where Solar Window is running):
-const SOLAR_WINDOW_URL = "http://localhost:5174";
+const SOLAR_WINDOW_URL = 'http://localhost:5174';
 ```
 
 ## Step 3: Test the Integration
@@ -107,4 +108,4 @@ solarWindow.onMessage('INTERACTION', (payload) => {
 
 ## Need Help?
 
-For additional help and documentation, visit the embedding guide in the Solar Window app at `/embed` or refer to the `EMBEDDING.md` file in the repository. 
+For additional help and documentation, visit the embedding guide in the Solar Window app at `/embed` or refer to the `EMBEDDING.md` file in the repository.

@@ -87,18 +87,18 @@
         if (geocoderResponse.results[0]) {
           defaultPlace.name = geocoderResponse.results[0].formatted_address;
           defaultPlace.address = geocoderResponse.results[0].formatted_address;
-          
+
           // Send interaction to parent
           sendInteraction('map_click', {
             lat: event.latLng.lat(),
             lng: event.latLng.lng(),
-            address: geocoderResponse.results[0].formatted_address
+            address: geocoderResponse.results[0].formatted_address,
           });
-          
+
           // Update state
           updateEngineState({
             location: { lat: event.latLng.lat(), lng: event.latLng.lng() },
-            address: geocoderResponse.results[0].formatted_address
+            address: geocoderResponse.results[0].formatted_address,
           });
         }
       }
@@ -107,9 +107,12 @@
 
   // Watch for location changes to update state
   $: if (location) {
-    updateEngineState({
-      location: { lat: location.lat(), lng: location.lng() }
-    }, false); // Don't notify right away, wait for more complete data
+    updateEngineState(
+      {
+        location: { lat: location.lat(), lng: location.lng() },
+      },
+      false,
+    ); // Don't notify right away, wait for more complete data
   }
 </script>
 
@@ -117,7 +120,7 @@
 <div class="flex flex-row h-full">
   <!-- Main map -->
   <div bind:this={mapElement} class="w-full" />
-  
+
   {#if placesLibrary && map}
     <SearchBar bind:location {placesLibrary} {map} initialValue={defaultPlace.name} />
   {/if}

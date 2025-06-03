@@ -41,25 +41,28 @@ export interface RegionalEnergyData {
  * @param stateCode The two-letter state code (e.g., 'CA' for California)
  * @returns Promise with electricity price data
  */
-export async function getElectricityPricesByState(stateCode: string): Promise<ElectricityPriceData[]> {
+export async function getElectricityPricesByState(
+  stateCode: string,
+): Promise<ElectricityPriceData[]> {
   try {
-    const response = await axios.get<EiaResponse<ElectricityPriceData>>(`${BASE_URL}/electricity/retail-sales/data`, {
-      params: {
-        api_key: EIA_API_KEY,
-        frequency: 'monthly',
-        data: 'price',
-        facets: {
-          sectorid: ['RES'],  // Residential sector
-          stateid: [stateCode]
+    const response = await axios.get<EiaResponse<ElectricityPriceData>>(
+      `${BASE_URL}/electricity/retail-sales/data`,
+      {
+        params: {
+          api_key: EIA_API_KEY,
+          frequency: 'monthly',
+          data: 'price',
+          facets: {
+            sectorid: ['RES'], // Residential sector
+            stateid: [stateCode],
+          },
+          sort: [{ column: 'period', direction: 'desc' }],
+          offset: 0,
+          length: 5,
         },
-        sort: [
-          { column: 'period', direction: 'desc' }
-        ],
-        offset: 0,
-        length: 5
-      }
-    });
-    
+      },
+    );
+
     return response.data.response.data;
   } catch (error) {
     console.error('Error fetching electricity prices:', error);
@@ -81,11 +84,11 @@ export async function getStateCodeFromLocation(location: google.maps.LatLng): Pr
     console.log('Geocoding location:', location.lat(), location.lng());
     const geocoder = new google.maps.Geocoder();
     const response = await geocoder.geocode({ location });
-    
+
     if (!response.results || response.results.length === 0) {
       throw new Error('No geocoding results found for this location');
     }
-    
+
     // Find the state component
     for (const result of response.results) {
       for (const component of result.address_components) {
@@ -95,7 +98,7 @@ export async function getStateCodeFromLocation(location: google.maps.LatLng): Pr
         }
       }
     }
-    
+
     throw new Error('No state information found in geocoding results');
   } catch (error) {
     console.error('Error getting state code from location:', error);
@@ -109,23 +112,24 @@ export async function getStateCodeFromLocation(location: google.maps.LatLng): Pr
  */
 export async function getNationalAverageElectricityPrice(): Promise<ElectricityPriceData[]> {
   try {
-    const response = await axios.get<EiaResponse<ElectricityPriceData>>(`${BASE_URL}/electricity/retail-sales/data`, {
-      params: {
-        api_key: EIA_API_KEY,
-        frequency: 'monthly',
-        data: 'price',
-        facets: {
-          sectorid: ['RES'],  // Residential sector
-          stateid: ['US']     // US average
+    const response = await axios.get<EiaResponse<ElectricityPriceData>>(
+      `${BASE_URL}/electricity/retail-sales/data`,
+      {
+        params: {
+          api_key: EIA_API_KEY,
+          frequency: 'monthly',
+          data: 'price',
+          facets: {
+            sectorid: ['RES'], // Residential sector
+            stateid: ['US'], // US average
+          },
+          sort: [{ column: 'period', direction: 'desc' }],
+          offset: 0,
+          length: 1,
         },
-        sort: [
-          { column: 'period', direction: 'desc' }
-        ],
-        offset: 0,
-        length: 1
-      }
-    });
-    
+      },
+    );
+
     return response.data.response.data;
   } catch (error) {
     console.error('Error fetching national average electricity price:', error);
@@ -138,34 +142,37 @@ export async function getNationalAverageElectricityPrice(): Promise<ElectricityP
  * @param location GoogleMaps LatLng object
  * @returns Promise with regional energy data
  */
-export async function getRegionalEnergyData(location: google.maps.LatLng): Promise<RegionalEnergyData> {
+export async function getRegionalEnergyData(
+  location: google.maps.LatLng,
+): Promise<RegionalEnergyData> {
   try {
     console.log('Fetching energy data for location:', location.toString());
-    
+
     // Get the state code from the location
     const stateCode = await getStateCodeFromLocation(location);
     console.log('Resolved state code:', stateCode);
-    
+
     // Get state electricity price data
     const stateElectricityData = await getElectricityPricesByState(stateCode);
     console.log('Received electricity data:', stateElectricityData);
-    
+
     // Get national average for comparison
-    const nationalData = await getNationalAverageElectricityPrice();
-    
+    // const nationalData = await getNationalAverageElectricityPrice();
+
     // Extract the latest residential rate
     const residentialRate = stateElectricityData.length > 0 ? stateElectricityData[0].value : null;
-    const stateName = stateElectricityData.length > 0 ? stateElectricityData[0].stateDescription : '';
-    const sourceInfo = stateElectricityData.length > 0 ? 
-      `EIA data for ${stateElectricityData[0].period}` : null;
-    
+    const stateName =
+      stateElectricityData.length > 0 ? stateElectricityData[0].stateDescription : '';
+    const sourceInfo =
+      stateElectricityData.length > 0 ? `EIA data for ${stateElectricityData[0].period}` : null;
+
     console.log('Processed energy data:', {
       stateCode,
       stateName,
       residentialRate,
-      sourceInfo
+      sourceInfo,
     });
-    
+
     return {
       stateCode,
       stateName,
@@ -175,10 +182,10 @@ export async function getRegionalEnergyData(location: google.maps.LatLng): Promi
       residentialSourceInfo: sourceInfo,
       commercialSourceInfo: null,
       industrialSourceInfo: null,
-      lastUpdated: new Date().toISOString()
+      lastUpdated: new Date().toISOString(),
     };
   } catch (error) {
     console.error('Error getting regional energy data:', error);
-    throw error;  // Re-throw to be handled by the component
+    throw error; // Re-throw to be handled by the component
   }
-} 
+}

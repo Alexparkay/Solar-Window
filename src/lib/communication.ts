@@ -1,12 +1,48 @@
+/**
+ * Communication module for Solar Window embedding
+ * Handles postMessage communication between parent and child applications
+ */
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type MessagePayload = any;
+
+/**
+ * Standard message format for communication
+ */
+export interface Message {
+  type: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  payload: any;
+  timestamp?: number;
+}
+
+/**
+ * Handler function type for processing messages
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type MessageHandler = (payload: any) => void;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type RawMessageHandler = (message: any) => void;
+
+/**
+ * Configuration for initializing communication
+ */
+export interface CommunicationConfig {
+  allowedOrigins?: string[];
+  debug?: boolean;
+}
+
 // Types for communication with parent dashboard
 export interface DashboardMessage {
   type: 'COMMAND' | 'STATE_REQUEST';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any;
   auth?: string;
 }
 
 export interface EngineMessage {
   type: 'STATE_UPDATE' | 'ENGINE_READY' | 'INTERACTION';
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   payload: any;
   timestamp: number;
 }
@@ -15,7 +51,9 @@ export interface EngineMessage {
 export interface SolarEngineState {
   location?: { lat: number; lng: number };
   address?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   buildingInsights?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   solarPotential?: any;
 }
 
@@ -40,16 +78,16 @@ export function initCommunication() {
 
   // Set up message listener
   window.addEventListener('message', handleParentMessage);
-  
+
   // Notify parent that we're ready
   setTimeout(() => {
     sendToDashboard({
       type: 'ENGINE_READY',
       payload: {
         version: '1.0.0',
-        capabilities: ['solar-analysis', 'map-interaction']
+        capabilities: ['solar-analysis', 'map-interaction'],
       },
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   }, 1000);
 }
@@ -63,16 +101,16 @@ function handleParentMessage(event: MessageEvent<DashboardMessage>) {
 
   // Process message
   const message = event.data;
-  
+
   switch (message.type) {
     case 'COMMAND':
       handleCommand(message.payload);
       break;
-      
+
     case 'STATE_REQUEST':
       sendStateUpdate();
       break;
-      
+
     default:
       console.warn('Unknown message type:', message.type);
   }
@@ -81,16 +119,16 @@ function handleParentMessage(event: MessageEvent<DashboardMessage>) {
 // Handle commands from parent dashboard
 function handleCommand(command: string) {
   console.log('Received command:', command);
-  
+
   switch (command) {
     case 'INITIALIZE':
       // No specific initialization needed beyond what's done at startup
       break;
-      
+
     case 'REFRESH':
       window.location.reload();
       break;
-      
+
     default:
       console.warn('Unknown command:', command);
   }
@@ -99,7 +137,7 @@ function handleCommand(command: string) {
 // Send messages to parent dashboard
 export function sendToDashboard(message: EngineMessage) {
   if (!isIframe) return;
-  
+
   try {
     window.parent.postMessage(message, parentOrigin);
   } catch (e) {
@@ -112,28 +150,29 @@ export function sendStateUpdate() {
   sendToDashboard({
     type: 'STATE_UPDATE',
     payload: engineState,
-    timestamp: Date.now()
+    timestamp: Date.now(),
   });
 }
 
 // Update the engine state and optionally notify parent
 export function updateEngineState(newState: Partial<SolarEngineState>, notify = true) {
   engineState = { ...engineState, ...newState };
-  
+
   if (notify) {
     sendStateUpdate();
   }
 }
 
 // Send interaction events to parent dashboard
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function sendInteraction(action: string, data?: any) {
   sendToDashboard({
     type: 'INTERACTION',
     payload: {
       action,
       data,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     },
-    timestamp: Date.now()
+    timestamp: Date.now(),
   });
-} 
+}

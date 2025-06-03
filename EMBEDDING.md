@@ -5,11 +5,13 @@ This guide explains how to embed the Solar Window application into your dashboar
 ## Quick Start
 
 1. Create a container element in your HTML:
+
    ```html
    <div id="solar-window-container"></div>
    ```
 
 2. Add a script tag to load the Solar Window embedding helper:
+
    ```html
    <script src="https://your-solar-window-url/lib/embed.js"></script>
    ```
@@ -21,7 +23,7 @@ This guide explains how to embed the Solar Window application into your dashboar
      apiKey: 'YOUR_GOOGLE_MAPS_API_KEY', // Optional
      height: '600px',
      width: '100%',
-     defaultLocation: '303 S Technology Ct' // Optional
+     defaultLocation: '303 S Technology Ct', // Optional
    });
    ```
 
@@ -30,6 +32,7 @@ This guide explains how to embed the Solar Window application into your dashboar
 If you prefer more control, you can manually embed the Solar Window application:
 
 1. Create an iframe:
+
    ```html
    <iframe
      id="solar-window-iframe"
@@ -40,34 +43,32 @@ If you prefer more control, you can manually embed the Solar Window application:
    ```
 
 2. Set up communication:
+
    ```javascript
    const iframe = document.getElementById('solar-window-iframe');
-   
+
    // Send message to Solar Window
    function sendToSolarWindow(type, payload) {
-     iframe.contentWindow.postMessage(
-       { type, payload },
-       'https://your-solar-window-url'
-     );
+     iframe.contentWindow.postMessage({ type, payload }, 'https://your-solar-window-url');
    }
-   
+
    // Listen for messages from Solar Window
    window.addEventListener('message', (event) => {
      if (event.origin === 'https://your-solar-window-url') {
        const { type, payload } = event.data;
        console.log('Message from Solar Window:', type, payload);
-       
+
        // Handle different message types
        switch (type) {
          case 'ENGINE_READY':
            console.log('Solar Window is ready');
            sendToSolarWindow('COMMAND', 'INITIALIZE');
            break;
-           
+
          case 'STATE_UPDATE':
            console.log('Solar Window state:', payload);
            break;
-           
+
          case 'INTERACTION':
            console.log('User interaction:', payload);
            break;
@@ -82,19 +83,19 @@ The Solar Window application communicates with the parent application using the 
 
 ### Messages from Dashboard to Solar Window
 
-| Message Type | Payload | Description |
-|--------------|---------|-------------|
-| `COMMAND` | `"INITIALIZE"` | Initialize the Solar Window app |
-| `COMMAND` | `"REFRESH"` | Refresh the Solar Window app |
-| `STATE_REQUEST` | (empty) | Request the current state of the Solar Window app |
+| Message Type    | Payload        | Description                                       |
+| --------------- | -------------- | ------------------------------------------------- |
+| `COMMAND`       | `"INITIALIZE"` | Initialize the Solar Window app                   |
+| `COMMAND`       | `"REFRESH"`    | Refresh the Solar Window app                      |
+| `STATE_REQUEST` | (empty)        | Request the current state of the Solar Window app |
 
 ### Messages from Solar Window to Dashboard
 
-| Message Type | Payload | Description |
-|--------------|---------|-------------|
-| `ENGINE_READY` | Version and capabilities | Sent when the Solar Window app is ready |
-| `STATE_UPDATE` | Current state object | Sent when the state changes |
-| `INTERACTION` | Interaction details | Sent when the user interacts with the app |
+| Message Type   | Payload                  | Description                               |
+| -------------- | ------------------------ | ----------------------------------------- |
+| `ENGINE_READY` | Version and capabilities | Sent when the Solar Window app is ready   |
+| `STATE_UPDATE` | Current state object     | Sent when the state changes               |
+| `INTERACTION`  | Interaction details      | Sent when the user interacts with the app |
 
 ### State Object Structure
 
@@ -116,6 +117,7 @@ The state object contains information about the current state of the Solar Windo
 Creates an embedded instance of the Solar Window application.
 
 **Parameters:**
+
 - `options` (Object): Configuration options
   - `containerId` (string): ID of the container element
   - `apiKey` (string, optional): Google Maps API key
@@ -124,6 +126,7 @@ Creates an embedded instance of the Solar Window application.
   - `defaultLocation` (string, optional): Default location to use
 
 **Returns:** An object with the following methods:
+
 - `sendMessage(type, payload)`: Send a message to the Solar Window app
 - `onMessage(type, handler)`: Register a handler for a specific message type
 - `getMessages()`: Get all messages received from the Solar Window app
@@ -137,37 +140,37 @@ import React, { useEffect, useRef } from 'react';
 const SolarWindowWidget = () => {
   const containerRef = useRef(null);
   const solarWindowRef = useRef(null);
-  
+
   useEffect(() => {
     if (containerRef.current && window.SolarWindow) {
       solarWindowRef.current = window.SolarWindow.embed({
         containerId: 'solar-window-container',
         height: '600px',
-        width: '100%'
+        width: '100%',
       });
-      
+
       // Listen for state updates
       solarWindowRef.current.onMessage('STATE_UPDATE', (payload) => {
         console.log('Solar Window state:', payload);
       });
-      
+
       // Listen for interactions
       solarWindowRef.current.onMessage('INTERACTION', (payload) => {
         console.log('User interaction:', payload);
       });
     }
-    
+
     return () => {
       // Cleanup if needed
     };
   }, []);
-  
+
   const requestState = () => {
     if (solarWindowRef.current) {
       solarWindowRef.current.sendMessage('STATE_REQUEST', '');
     }
   };
-  
+
   return (
     <div>
       <div id="solar-window-container" ref={containerRef}></div>
@@ -193,7 +196,7 @@ export default SolarWindowWidget;
 export default {
   data() {
     return {
-      solarWindow: null
+      solarWindow: null,
     };
   },
   mounted() {
@@ -201,9 +204,9 @@ export default {
       this.solarWindow = window.SolarWindow.embed({
         containerId: 'solar-window-container',
         height: '600px',
-        width: '100%'
+        width: '100%',
       });
-      
+
       this.solarWindow.onMessage('STATE_UPDATE', this.handleStateUpdate);
       this.solarWindow.onMessage('INTERACTION', this.handleInteraction);
     }
@@ -222,8 +225,8 @@ export default {
     },
     handleInteraction(payload) {
       console.log('User interaction:', payload);
-    }
-  }
+    },
+  },
 };
 </script>
 ```
@@ -240,14 +243,17 @@ When embedding the Solar Window app in a production environment, consider these 
 ## Troubleshooting
 
 ### The iframe doesn't load
+
 - Check that the URL is correct and accessible
 - Ensure there are no CORS issues
 
 ### Communication doesn't work
+
 - Check browser console for errors
 - Verify that the origins match or are properly configured
 - Make sure both applications are using HTTPS (or both HTTP for local development)
 
 ### Solar Window appears but doesn't initialize
+
 - Check that the Google Maps API key is valid
-- Verify that the initialization sequence is correct 
+- Verify that the initialization sequence is correct
